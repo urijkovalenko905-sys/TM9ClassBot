@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Расписание 9 класс</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ─── CSS Variables ───────────────────────────────────────────────────── */
+:root {
+  --bg:          #0c0c12;
+  --bg2:         #13131c;
+  --bg3:         #1a1a26;
+  --bg4:         #202030;
+  --card:        rgba(255,255,255,0.055);
+  --card-h:      rgba(255,255,255,0.09);
+  --border:      rgba(255,255,255,0.08);
+  --border2:     rgba(255,255,255,0.14);
+  --text:        #eeeef5;
+  --text2:       #7777a0;
+  --text3:       #44445a;
+  --accent:      #6c7fff;
+  --accent2:     #a78bfa;
+  --accent-glow: rgba(108,127,255,0.3);
+  --green:       #34d399;
+  --yellow:      #fbbf24;
+  --red:         #f87171;
+  --r:           16px;
+  --r-sm:        10px;
+  --font:        'Onest', sans-serif;
+  --mono:        'JetBrains Mono', monospace;
+  --safe-t:      env(safe-area-inset-top,0px);
+  --safe-b:      env(safe-area-inset-bottom,0px);
+}
+[data-theme="light"] {
+  --bg:    #f0f0f6; --bg2: #e8e8f0; --bg3: #e0e0ea; --bg4: #d8d8e4;
+  --card:  rgba(0,0,0,0.04); --card-h: rgba(0,0,0,0.07);
+  --border: rgba(0,0,0,0.07); --border2: rgba(0,0,0,0.12);
+  --text:  #0f0f1e; --text2: #555570; --text3: #9999bb;
+  --accent: #4f5eee; --accent2: #7c3aed;
+  --accent-glow: rgba(79,94,238,0.2);
+}
+
+/* ─── Reset ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{height:100%;overscroll-behavior:none;}
+body{
+  font-family:var(--font);background:var(--bg);color:var(--text);
+  min-height:100vh;overflow-x:hidden;
+  padding-bottom:calc(66px + var(--safe-b));
+  transition:background .3s,color .3s;
+}
+a{color:inherit;text-decoration:none;}
+button{font-family:var(--font);}
+
+/* ─── Grain overlay ── */
+body::after{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity:.6;
+}
+
+/* ─── Header ── */
+.hdr{
+  position:sticky;top:0;z-index:50;
+  background:rgba(12,12,18,.85);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  padding:calc(var(--safe-t) + 10px) 16px 10px;
+  display:flex;align-items:center;gap:10px;
+}
+.hdr-logo{
+  width:36px;height:36px;border-radius:11px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  display:flex;align-items:center;justify-content:center;font-size:17px;
+  box-shadow:0 4px 14px var(--accent-glow);
+}
+.hdr-info{flex:1;min-width:0;}
+.hdr-class{font-size:16px;font-weight:700;letter-spacing:-.3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.hdr-sub{font-size:11px;color:var(--text2);margin-top:1px;}
+.cls-btn{
+  background:var(--card);border:1px solid var(--border2);color:var(--accent);
+  font-size:12px;font-weight:600;padding:6px 12px;border-radius:20px;cursor:pointer;
+  transition:all .18s;white-space:nowrap;
+}
+.cls-btn:active{transform:scale(.95);}
+
+/* ─── Views ── */
+.view{display:none;animation:fadeIn .22s ease;}
+.view.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+
+/* ─────────────────────────────────────────────────────────────────
+   MAIN TAB
+───────────────────────────────────────────────────────────────── */
+.clock-section{
+  display:flex;flex-direction:column;align-items:center;
+  padding:28px 16px 20px;
+  position:relative;
+}
+/* Glow blob behind clock */
+.clock-section::before{
+  content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:240px;height:120px;
+  background:radial-gradient(ellipse,var(--accent-glow) 0%,transparent 70%);
+  pointer-events:none;
+}
+.clock-display{
+  font-family:var(--mono);font-size:clamp(52px,16vw,76px);font-weight:700;
+  letter-spacing:-.02em;line-height:1;
+  background:linear-gradient(135deg,var(--text) 40%,var(--text2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  position:relative;z-index:1;
+}
+.clock-colon{animation:blinkColon 1s step-end infinite;}
+@keyframes blinkColon{0%,100%{opacity:1}50%{opacity:.15}}
+.clock-seconds{
+  font-family:var(--mono);font-size:clamp(18px,5vw,24px);font-weight:400;
+  color:var(--text2);margin-top:4px;letter-spacing:.05em;
+  position:relative;z-index:1;
+}
+.clock-date{
+  font-size:15px;font-weight:500;color:var(--text2);margin-top:10px;
+  letter-spacing:.01em;position:relative;z-index:1;
+}
+
+/* Status card */
+.status-wrap{padding:0 16px 12px;}
+.status-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--r);padding:14px 16px;
+  display:flex;align-items:center;gap:14px;
+  transition:background .4s,border-color .4s;
+}
+.status-card.s-active{border-color:rgba(108,127,255,.4);background:rgba(108,127,255,.1);}
+.status-card.s-break {border-color:rgba(52,211,153,.4); background:rgba(52,211,153,.08);}
+.status-card.s-done  {border-color:rgba(251,191,36,.35); background:rgba(251,191,36,.07);}
+.pulse-dot{width:10px;height:10px;border-radius:50%;background:var(--text3);flex-shrink:0;}
+.status-card.s-active .pulse-dot{background:var(--accent);animation:pulseAnim 1.8s ease-in-out infinite;}
+.status-card.s-break  .pulse-dot{background:var(--green); animation:pulseAnim 1.8s ease-in-out infinite;}
+.status-card.s-done   .pulse-dot{background:var(--yellow);}
+@keyframes pulseAnim{0%,100%{box-shadow:0 0 0 0 currentColor;opacity:1}50%{box-shadow:0 0 0 6px transparent;opacity:.7}}
+.status-body{flex:1;min-width:0;}
+.status-lbl{font-size:12px;color:var(--text2);}
+.status-main{font-size:15px;font-weight:700;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.status-timer{font-family:var(--mono);font-size:22px;font-weight:700;letter-spacing:-.5px;color:var(--accent);flex-shrink:0;}
+.status-card.s-break .status-timer{color:var(--green);}
+
+/* Next lesson hint */
+.next-hint{
+  margin:0 16px 10px;
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r-sm);
+  padding:9px 14px;display:none;align-items:center;gap:10px;font-size:13px;
+}
+.next-hint.show{display:flex;}
+.nh-room{font-weight:700;color:var(--accent);background:rgba(108,127,255,.12);border-radius:6px;padding:2px 8px;flex-shrink:0;}
+
+/* Main tab — today schedule */
+.main-today-wrap{padding:0 16px 0;}
+.main-today-title{
+  font-size:11px;font-weight:700;letter-spacing:.9px;text-transform:uppercase;
+  color:var(--text3);padding:10px 2px 8px;
+}
+.main-sched-list{display:flex;flex-direction:column;gap:7px;padding-bottom:12px;}
+.l-card.past{opacity:.38;cursor:default;background:var(--bg3);border-style:dashed;}
+.l-card.next-up{border-color:rgba(52,211,153,.45);background:rgba(52,211,153,.07);}
+.l-card.next-up::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:linear-gradient(var(--green),#34d39988);border-radius:3px 0 0 3px;}
+.next-badge{
+  font-size:10px;font-weight:700;color:var(--green);
+  background:rgba(52,211,153,.15);border-radius:5px;padding:2px 6px;flex-shrink:0;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   SCHEDULE TAB
+───────────────────────────────────────────────────────────────── */
+.days-bar{overflow-x:auto;padding:14px 16px 0;scrollbar-width:none;}
+.days-bar::-webkit-scrollbar{display:none;}
+.days-row{display:flex;gap:7px;width:max-content;}
+.day-tab{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r-sm);
+  padding:8px 14px;font-size:13px;font-weight:600;color:var(--text2);
+  cursor:pointer;transition:all .18s;white-space:nowrap;
+}
+.day-tab:active{transform:scale(.95);}
+.day-tab.today:not(.active){border-color:var(--accent);color:var(--accent);}
+.day-tab.active{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;border-color:transparent;
+  box-shadow:0 4px 14px var(--accent-glow);
+}
+.sched-list{padding:12px 16px 0;display:flex;flex-direction:column;gap:7px;}
+.l-card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r);
+  padding:11px 13px;display:flex;align-items:center;gap:11px;
+  cursor:pointer;transition:all .18s;position:relative;overflow:hidden;
+}
+.l-card:active{transform:scale(.98);}
+.l-card.cur{border-color:rgba(108,127,255,.5);background:rgba(108,127,255,.1);}
+.l-card.cur::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:linear-gradient(var(--accent),var(--accent2));border-radius:3px 0 0 3px;}
+.l-card.ct{background:var(--bg3);opacity:.65;cursor:default;border-style:dashed;}
+.l-num{font-size:11px;font-weight:700;color:var(--text3);width:16px;text-align:center;flex-shrink:0;}
+.l-card.cur .l-num{color:var(--accent);}
+.l-emoji{font-size:20px;flex-shrink:0;}
+.l-info{flex:1;min-width:0;}
+.l-name{font-size:14px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.l-time{font-family:var(--mono);font-size:11px;color:var(--text2);margin-top:2px;}
+.l-room{
+  background:var(--bg3);border:1px solid var(--border);border-radius:8px;
+  padding:3px 9px;font-size:12px;font-weight:700;color:var(--text2);flex-shrink:0;
+}
+.l-card.cur .l-room{color:var(--accent);border-color:var(--accent);background:rgba(108,127,255,.12);}
+.hw-dot{width:6px;height:6px;border-radius:50%;background:var(--accent2);flex-shrink:0;}
+
+/* ─────────────────────────────────────────────────────────────────
+   BELLS TAB
+───────────────────────────────────────────────────────────────── */
+.bells-wrap{padding:14px 16px 0;}
+.sec-title{
+  font-size:11px;font-weight:700;letter-spacing:.9px;text-transform:uppercase;
+  color:var(--text3);margin-bottom:10px;padding-left:2px;
+}
+.bell-grid{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;
+}
+.bell-row{
+  display:flex;align-items:center;padding:10px 14px;
+  border-bottom:1px solid var(--border);gap:12px;
+}
+.bell-row:last-child{border-bottom:none;}
+.bell-row.cur-bell{background:rgba(108,127,255,.08);}
+.b-num{font-size:13px;font-weight:700;color:var(--accent);width:20px;flex-shrink:0;}
+.b-times{flex:1;font-family:var(--mono);font-size:13px;color:var(--text2);}
+.b-dur{font-size:11px;color:var(--text3);}
+.b-brk{font-size:11px;color:var(--text3);margin-top:1px;}
+.day-switcher{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;}
+.ds-btn{
+  background:var(--card);border:1px solid var(--border);border-radius:8px;
+  padding:6px 12px;font-size:12px;font-weight:600;color:var(--text2);
+  cursor:pointer;transition:all .18s;
+}
+.ds-btn.active{background:var(--bg4);border-color:var(--accent);color:var(--accent);}
+
+/* ─────────────────────────────────────────────────────────────────
+   OGE HUB TAB
+───────────────────────────────────────────────────────────────── */
+.oge-wrap{padding:14px 16px 0;}
+.oge-exams{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;}
+.exam-card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r);
+  padding:13px 15px;display:flex;align-items:center;gap:14px;
+}
+.exam-date-badge{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  border-radius:10px;padding:6px 10px;text-align:center;flex-shrink:0;min-width:52px;
+  box-shadow:0 3px 10px var(--accent-glow);
+}
+.exam-dd{font-size:18px;font-weight:800;color:#fff;line-height:1;}
+.exam-mm{font-size:10px;font-weight:600;color:rgba(255,255,255,.75);text-transform:uppercase;letter-spacing:.5px;}
+.exam-info{flex:1;min-width:0;}
+.exam-subjs{font-size:13px;font-weight:600;line-height:1.4;}
+.exam-counter{text-align:right;flex-shrink:0;}
+.exam-days-num{font-family:var(--mono);font-size:22px;font-weight:800;color:var(--accent);line-height:1;}
+.exam-days-lbl{font-size:10px;color:var(--text3);margin-top:1px;}
+.exam-card.past .exam-days-num{color:var(--text3);font-size:14px;}
+
+/* OGE subjects grid */
+.oge-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:4px;}
+.oge-subj-btn{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r);
+  padding:14px 8px;text-align:center;cursor:pointer;transition:all .2s;
+  display:flex;flex-direction:column;align-items:center;gap:7px;
+}
+.oge-subj-btn:active{transform:scale(.94);}
+.oge-subj-emoji{font-size:26px;}
+.oge-subj-name{font-size:11px;font-weight:600;color:var(--text2);line-height:1.3;}
+
+/* ─────────────────────────────────────────────────────────────────
+   BOTTOM NAV
+───────────────────────────────────────────────────────────────── */
+.bot-nav{
+  position:fixed;bottom:0;left:0;right:0;z-index:40;
+  background:rgba(13,13,20,.92);backdrop-filter:blur(20px);
+  border-top:1px solid var(--border);
+  display:flex;align-items:stretch;
+  padding-bottom:var(--safe-b);
+}
+.nav-btn{
+  flex:1;background:none;border:none;color:var(--text3);
+  font-size:10px;font-weight:600;letter-spacing:.01em;
+  padding:9px 4px;cursor:pointer;display:flex;flex-direction:column;
+  align-items:center;gap:4px;transition:color .2s;
+}
+.nav-btn.active{color:var(--accent);}
+.nav-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8px;stroke-linecap:round;stroke-linejoin:round;}
+
+/* ─────────────────────────────────────────────────────────────────
+   BOTTOM SHEETS & MODALS
+───────────────────────────────────────────────────────────────── */
+.overlay{
+  position:fixed;inset:0;z-index:100;
+  background:rgba(0,0,0,.65);backdrop-filter:blur(10px);
+  display:none;align-items:flex-end;
+}
+.overlay.open{display:flex;}
+.sheet{
+  width:100%;background:var(--bg2);border-radius:22px 22px 0 0;
+  border:1px solid var(--border);border-bottom:none;
+  padding:20px 20px calc(20px + var(--safe-b));
+  max-height:80vh;overflow-y:auto;
+  animation:slideUp .28s cubic-bezier(.34,1.5,.64,1);
+}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:none}}
+.sheet-handle{width:38px;height:4px;background:var(--bg4);border-radius:2px;margin:0 auto 18px;}
+.sheet-title{font-size:20px;font-weight:800;margin-bottom:4px;}
+.sheet-sub{font-size:13px;color:var(--text2);margin-bottom:18px;}
+
+/* HW textarea */
+.hw-ta{
+  width:100%;background:var(--bg3);border:1px solid var(--border);
+  border-radius:var(--r-sm);color:var(--text);font-family:var(--font);
+  font-size:15px;padding:12px;min-height:90px;resize:none;outline:none;
+  transition:border .2s;
+}
+.hw-ta:focus{border-color:var(--accent);}
+.btn-row{display:flex;gap:10px;margin-top:12px;}
+.btn{
+  flex:1;padding:13px;border-radius:var(--r-sm);border:none;
+  font-size:15px;font-weight:700;cursor:pointer;transition:all .18s;
+}
+.btn:active{transform:scale(.97);}
+.btn-p{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;}
+.btn-s{background:var(--bg3);color:var(--text2);border:1px solid var(--border);}
+
+/* OGE resource sheet */
+.res-links{display:flex;flex-direction:column;gap:10px;margin-top:4px;}
+.res-link{
+  background:var(--bg3);border:1px solid var(--border);border-radius:var(--r-sm);
+  padding:13px 16px;display:flex;align-items:center;gap:12px;
+  cursor:pointer;transition:all .18s;text-decoration:none;color:var(--text);
+}
+.res-link:active{transform:scale(.98);}
+.res-link-icon{font-size:22px;flex-shrink:0;}
+.res-link-info{flex:1;}
+.res-link-title{font-size:14px;font-weight:700;}
+.res-link-url{font-size:11px;color:var(--text3);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.res-link-arrow{color:var(--text3);font-size:18px;flex-shrink:0;}
+
+/* Class selector modal */
+.modal-overlay{
+  position:fixed;inset:0;z-index:200;
+  background:rgba(0,0,0,.75);backdrop-filter:blur(12px);
+  display:none;align-items:center;justify-content:center;padding:20px;
+}
+.modal-overlay.open{display:flex;}
+.modal{
+  background:var(--bg2);border:1px solid var(--border);border-radius:22px;
+  padding:24px;width:100%;max-width:320px;
+  animation:popIn .22s cubic-bezier(.34,1.5,.64,1);
+}
+@keyframes popIn{from{transform:scale(.8);opacity:0}to{transform:none;opacity:1}}
+.modal-title{font-size:19px;font-weight:800;margin-bottom:16px;}
+.cls-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;}
+.cls-opt{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r-sm);
+  padding:13px;text-align:center;font-size:15px;font-weight:700;
+  color:var(--text);cursor:pointer;transition:all .18s;
+}
+.cls-opt:active{transform:scale(.93);}
+.cls-opt.sel{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;border-color:transparent;
+}
+</style>
+</head>
+<body>
+
+<!-- ─── HEADER ─── -->
+<header class="hdr">
+  <div class="hdr-logo">🏫</div>
+  <div class="hdr-info">
+    <div class="hdr-class" id="hdrClass">Расписание</div>
+    <div class="hdr-sub" id="hdrSub">Загрузка...</div>
+  </div>
+  <button class="cls-btn" onclick="openClassModal()">Класс ▾</button>
+</header>
+
+<!-- ─── VIEW: MAIN ─── -->
+<div class="view active" id="viewMain">
+  <div class="clock-section">
+    <div class="clock-display">
+      <span id="clockH">00</span><span class="clock-colon">:</span><span id="clockM">00</span>
+    </div>
+    <div class="clock-seconds" id="clockS">00</div>
+    <div class="clock-date" id="clockDate">—</div>
+  </div>
+
+  <div class="status-wrap">
+    <div class="status-card" id="statusCard">
+      <div class="pulse-dot" id="pulseDot"></div>
+      <div class="status-body">
+        <div class="status-lbl" id="sLbl">Определяем...</div>
+        <div class="status-main" id="sMain">—</div>
+      </div>
+      <div class="status-timer" id="sTimer"></div>
+    </div>
+  </div>
+
+  <div class="next-hint" id="nextHint">
+    <span id="nhEmoji">📍</span>
+    <span style="flex:1;color:var(--text2)" id="nhText">Следующий урок</span>
+    <span class="nh-room" id="nhRoom">—</span>
+  </div>
+
+  <div class="main-today-wrap">
+    <div class="main-today-title" id="mainTodayTitle">Расписание на сегодня</div>
+    <div class="main-sched-list" id="mainSchedList"></div>
+  </div>
+</div>
+
+<!-- ─── VIEW: SCHEDULE ─── -->
+<div class="view" id="viewSchedule">
+  <div class="days-bar"><div class="days-row" id="daysRow"></div></div>
+  <div class="sched-list" id="schedList"></div>
+</div>
+
+<!-- ─── VIEW: BELLS ─── -->
+<div class="view" id="viewBells">
+  <div class="bells-wrap">
+    <div class="sec-title">Выбери день</div>
+    <div class="day-switcher" id="bellDaySwitcher"></div>
+    <div class="sec-title">Расписание звонков</div>
+    <div class="bell-grid" id="bellGrid"></div>
+  </div>
+</div>
+
+<!-- ─── VIEW: OGE ─── -->
+<div class="view" id="viewOge">
+  <div class="oge-wrap">
+    <div class="sec-title">Даты ОГЭ 2026</div>
+    <div class="oge-exams" id="ogeExams"></div>
+    <div class="sec-title">Ресурсы для подготовки</div>
+    <div class="oge-grid" id="ogeGrid"></div>
+    <div style="height:8px"></div>
+  </div>
+</div>
+
+<!-- ─── BOTTOM NAV ─── -->
+<nav class="bot-nav">
+  <button class="nav-btn active" id="navMain" onclick="sw('main')">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Главная
+  </button>
+  <button class="nav-btn" id="navSchedule" onclick="sw('schedule')">
+    <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Расписание
+  </button>
+  <button class="nav-btn" id="navBells" onclick="sw('bells')">
+    <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>Звонки
+  </button>
+  <button class="nav-btn" id="navOge" onclick="sw('oge')">
+    <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>ОГЭ 2026
+  </button>
+</nav>
+
+<!-- ─── HW BOTTOM SHEET ─── -->
+<div class="overlay" id="hwOverlay" onclick="closeSheet('hwOverlay',event)">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title" id="hwTitle">Домашнее задание</div>
+    <div class="sheet-sub" id="hwSub">—</div>
+    <textarea class="hw-ta" id="hwTa" placeholder="Запиши домашнее задание..."></textarea>
+    <div class="btn-row">
+      <button class="btn btn-s" onclick="document.getElementById('hwOverlay').classList.remove('open')">Отмена</button>
+      <button class="btn btn-p" onclick="saveHW()">💾 Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── OGE RESOURCE BOTTOM SHEET ─── -->
+<div class="overlay" id="resOverlay" onclick="closeSheet('resOverlay',event)">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title" id="resTitle">Ресурсы</div>
+    <div class="sheet-sub" id="resSub">Полезные ссылки для подготовки</div>
+    <div class="res-links" id="resLinks"></div>
+  </div>
+</div>
+
+<!-- ─── CLASS MODAL ─── -->
+<div class="modal-overlay" id="classModal" onclick="closeSheet('classModal',event)">
+  <div class="modal">
+    <div class="modal-title">Выбери класс</div>
+    <div class="cls-grid" id="clsGrid"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SCRIPT
+══════════════════════════════════════════════════════════════════ -->
+<script>
+// ─── SMART BELL SCHEDULES ────────────────────────────────────────────────────
+const BELL_SCHEDULES = {
+  // Понедельник (1), Четверг (4)
+  monThu: [
+    {lesson:1,start:"08:00",end:"08:30"},
+    {lesson:2,start:"08:40",end:"09:20"},
+    {lesson:3,start:"09:35",end:"10:15"},
+    {lesson:4,start:"10:30",end:"11:10"},
+    {lesson:5,start:"11:25",end:"12:00"},
+    {lesson:6,start:"12:10",end:"12:45"},
+    {lesson:7,start:"12:50",end:"13:25"},
+  ],
+  // Вторник (2), Среда (3), Пятница (5)
+  tuWeFr: [
+    {lesson:1,start:"08:00",end:"08:40"},
+    {lesson:2,start:"08:50",end:"09:30"},
+    {lesson:3,start:"09:40",end:"10:20"},
+    {lesson:4,start:"10:35",end:"11:15"},
+    {lesson:5,start:"11:30",end:"12:10"},
+    {lesson:6,start:"12:15",end:"12:55"},
+    {lesson:7,start:"13:00",end:"13:40"},
+  ],
+  // Суббота (6)
+  sat: [
+    {lesson:1,start:"08:00",end:"08:40"},
+    {lesson:2,start:"08:45",end:"09:25"},
+    {lesson:3,start:"09:40",end:"10:20"},
+    {lesson:4,start:"10:25",end:"11:05"},
+  ],
+};
+
+function getBells(dayIdx) { // dayIdx: 0=Sun,1=Mon,...,6=Sat
+  if (dayIdx===1||dayIdx===4) return BELL_SCHEDULES.monThu;
+  if (dayIdx===2||dayIdx===3||dayIdx===5) return BELL_SCHEDULES.tuWeFr;
+  if (dayIdx===6) return BELL_SCHEDULES.sat;
+  return BELL_SCHEDULES.tuWeFr; // fallback
+}
+
+// ─── SUBJECTS ────────────────────────────────────────────────────────────────
+const SUBJ = {
+  "Математика":              {emoji:"📐",c:"#4f8ef7"},
+  "Русский язык":            {emoji:"✍️",c:"#f7724f"},
+  "Литература":              {emoji:"📖",c:"#9b59b6"},
+  "Физика":                  {emoji:"⚡",c:"#f1c40f"},
+  "Химия":                   {emoji:"🧪",c:"#2ecc71"},
+  "Биология":                {emoji:"🌿",c:"#27ae60"},
+  "История":                 {emoji:"🏛️",c:"#e67e22"},
+  "География":               {emoji:"🌍",c:"#1abc9c"},
+  "Обществознание":          {emoji:"🤝",c:"#3498db"},
+  "Информатика":             {emoji:"💻",c:"#6c7fff"},
+  "Английский язык":         {emoji:"🇬🇧",c:"#e74c3c"},
+  "Физическая культура":     {emoji:"🏃",c:"#e91e8c"},
+  "Труд":                    {emoji:"🔧",c:"#795548"},
+  "ОБЗР":                    {emoji:"🛡️",c:"#607d8b"},
+  "Классный час":            {emoji:"🎓",c:"#9e9e9e"},
+  "Пр. и исслед. деят.":     {emoji:"🔬",c:"#00bcd4"},
+  "Проект. и исслед. деят.": {emoji:"🔬",c:"#00bcd4"},
+};
+
+// ─── OGE EXAMS 2026 ──────────────────────────────────────────────────────────
+const OGE_EXAMS = [
+  {date:"2026-06-02",label:"2 июня",  subjects:"Математика"},
+  {date:"2026-06-05",label:"5 июня",  subjects:"Обществознание, Химия, Физика, Биология, История, География, Литература, Иностранные языки"},
+  {date:"2026-06-06",label:"6 июня",  subjects:"Информатика, Иностранные языки"},
+  {date:"2026-06-09",label:"9 июня",  subjects:"Русский язык"},
+  {date:"2026-06-16",label:"16 июня", subjects:"Предметы по выбору (кроме рус. и мат.)"},
+  {date:"2026-06-19",label:"19 июня", subjects:"Предметы по выбору (кроме рус. и мат.)"},
+];
+
+// ─── OGE RESOURCES ───────────────────────────────────────────────────────────
+const OGE_RESOURCES = [
+  { name:"Русский язык", emoji:"✍️", links:[
+    {icon:"📚",title:"Банк ФИПИ",url:"https://oge.fipi.ru/bank/index.php?proj=2F5EE3B12FE2A0EA40B06BF61A015416"},
+    {icon:"🎓",title:"Школково",  url:"https://3.shkolkovo.online/catalog?SubjectId=32"},
+    {icon:"▶️",title:"YouTube",   url:"https://www.youtube.com/@shkolkovo-OGE"},
+  ]},
+  { name:"Математика", emoji:"📐", links:[
+    {icon:"📚",title:"Банк ФИПИ",url:"https://oge.fipi.ru/bank/index.php?proj=DE0E276E497AB3784C3FC4CC20248DC0"},
+    {icon:"🎓",title:"Школково",  url:"https://3.shkolkovo.online/catalog?SubjectId=32"},
+    {icon:"▶️",title:"YouTube",   url:"https://www.youtube.com/@shkolkovo-OGE"},
+  ]},
+  { name:"Физика", emoji:"⚡", links:[
+    {icon:"📚",title:"Банк ФИПИ",url:"https://oge.fipi.ru/bank/index.php?proj=B24AFED7DE6AB5BC461219556CCA4F9B"},
+    {icon:"🎓",title:"Школково",  url:"https://3.shkolkovo.online/catalog?SubjectId=33"},
+    {icon:"▶️",title:"YouTube",   url:"https://www.youtube.com/@ShkolkovoGk"},
+  ]},
+  { name:"Химия", emoji:"🧪", links:[
+    {icon:"📚",title:"Банк ФИПИ",url:"https://oge.fipi.ru/bank/index.php?proj=33B3A93C5A6599124B04FB95616C835B"},
+    {icon:"▶️",title:"YouTube (Умскул)",url:"https://www.youtube.com/results?search_query=Химия+ОГЭ+2026+Умскул"},
+  ]},
+  { name:"Биология", emoji:"🌿", links:[
+    {icon:"📚",title:"Банк ФИПИ",url:"https://oge.fipi.ru/bank/index.php?proj=0E1FA4229923A5CE4FC368155127ED90"},
+    {icon:"🎓",title:"Школково",  url:"https://3.shkolkovo.online/catalog?SubjectId=36"},
+    {icon:"▶️",title:"YouTube (Умскул)",url:"https://www.youtube.com/results?search_query=Биология+ОГЭ+Умскул"},
+  ]},
+  { name:"Обществознание", emoji:"🤝", links:[
+    {icon:"📚",title:"Банк ФИПИ",url:"https://oge.fipi.ru/bank/index.php?proj=AE63AB28A2D28E194A286FA5A8EB9A78"},
+    {icon:"🎓",title:"Школково",  url:"https://3.shkolkovo.online/catalog?SubjectId=35"},
+    {icon:"▶️",title:"YouTube (Умскул)",url:"https://www.youtube.com/results?search_query=Обществознание+ОГЭ+Умскул"},
+  ]},
+  { name:"География", emoji:"🌍", links:[
+    {icon:"📚",title:"Банк ФИПИ",url:"https://oge.fipi.ru/bank/index.php?proj=0FA4DA9E3AE2BA1547B75F0B08EF6445"},
+    {icon:"▶️",title:"YouTube (Умскул)",url:"https://www.youtube.com/results?search_query=География+ОГЭ+Умскул"},
+  ]},
+  { name:"Информатика", emoji:"💻", links:[
+    {icon:"📚",title:"Банк ФИПИ",url:"https://oge.fipi.ru/bank/index.php?proj=74676951F093A0754D74F2D6E7955F06"},
+    {icon:"🎓",title:"Школково",  url:"https://3.shkolkovo.online/catalog?SubjectId=34"},
+    {icon:"▶️",title:"YouTube",   url:"https://www.youtube.com/@umsch_i_oge"},
+  ]},
+  { name:"Английский", emoji:"🇬🇧", links:[
+    {icon:"📚",title:"Банк ФИПИ",url:"https://oge.fipi.ru/bank/index.php?proj=8BBD5C99F37898B6402964AB11955663"},
+    {icon:"▶️",title:"YouTube (Умскул)",url:"https://www.youtube.com/results?search_query=Английский+ОГЭ+Умскул"},
+  ]},
+];
+
+// ─── SCHEDULE DATA ────────────────────────────────────────────────────────────
+const SCHEDULE = {
+  "9А":{
+    monday:[{num:1,subject:"Классный час",room:null,note:"«Разговоры о важном»"},{num:2,subject:"История",room:"61"},{num:3,subject:"Обществознание",room:"61"},{num:4,subject:"Физика",room:"27"},{num:5,subject:"Математика",room:"46"},{num:6,subject:"Русский язык",room:"57"},{num:7,subject:"Литература",room:"57"}],
+    tuesday:[{num:1,subject:"Информатика",room:"28"},{num:2,subject:"Физическая культура",room:null},{num:3,subject:"Физика",room:"27"},{num:4,subject:"Труд",room:"4"},{num:5,subject:"Математика",room:"46"},{num:6,subject:"Английский язык",room:"53/54"},{num:7,subject:"Химия",room:"18"}],
+    wednesday:[{num:1,subject:"Русский язык",room:"57"},{num:2,subject:"Литература",room:"57"},{num:3,subject:"География",room:"56"},{num:4,subject:"Английский язык",room:"48/54"},{num:5,subject:"Физическая культура",room:null},{num:6,subject:"Математика",room:"46"}],
+    thursday:[{num:1,subject:"Классный час",room:null,note:"«Россия — мои горизонты»"},{num:2,subject:"Математика",room:"46"},{num:3,subject:"История",room:"61"},{num:4,subject:"История",room:"61"},{num:5,subject:"Биология",room:"41"},{num:6,subject:"Физическая культура",room:null},{num:7,subject:"Математика",room:"46"}],
+    friday:[{num:1,subject:"Физика",room:"27"},{num:2,subject:"Математика",room:"46"},{num:3,subject:"Английский язык",room:"47/54"},{num:4,subject:"География",room:"56"},{num:5,subject:"Русский язык",room:"57"},{num:6,subject:"Химия",room:"18"}],
+    saturday:[{num:1,subject:"ОБЗР",room:"55"},{num:2,subject:"Пр. и исслед. деят.",room:"59"},{num:3,subject:"Биология",room:"41"},{num:4,subject:"Литература",room:"57"}],
+  },
+  "9Б":{
+    monday:[{num:1,subject:"Классный час",room:null},{num:2,subject:"Физика",room:"27"},{num:3,subject:"Математика",room:"37"},{num:4,subject:"История",room:"61"},{num:5,subject:"География",room:"62"},{num:6,subject:"Физическая культура",room:null}],
+    tuesday:[{num:1,subject:"Биология",room:"41"},{num:2,subject:"Русский язык",room:"57"},{num:3,subject:"Литература",room:"57"},{num:4,subject:"Физика",room:"27"},{num:5,subject:"Информатика",room:"28"},{num:6,subject:"История",room:"61"},{num:7,subject:"Английский язык",room:"44/54"}],
+    wednesday:[{num:1,subject:"История",room:"61"},{num:2,subject:"Обществознание",room:"61"},{num:3,subject:"Физическая культура",room:null},{num:4,subject:"Труд",room:"4"},{num:5,subject:"Химия",room:"18"},{num:6,subject:"Математика",room:"37"},{num:7,subject:"Биология",room:"41"}],
+    thursday:[{num:1,subject:"Классный час",room:null},{num:2,subject:"ОБЗР",room:"55"},{num:3,subject:"География",room:"62"},{num:4,subject:"Физическая культура",room:null},{num:5,subject:"Русский язык",room:"57"},{num:6,subject:"Литература",room:"57"},{num:7,subject:"Английский язык",room:"44/54"}],
+    friday:[{num:1,subject:"Химия",room:"18"},{num:2,subject:"Русский язык",room:"57"},{num:3,subject:"Литература",room:"57"},{num:4,subject:"Математика",room:"37"},{num:5,subject:"Математика",room:"37"},{num:6,subject:"Физика",room:"27"}],
+    saturday:[{num:1,subject:"Пр. и исслед. деят.",room:"59"},{num:2,subject:"Математика",room:"37"},{num:3,subject:"Английский язык",room:"44/54"},{num:4,subject:"Математика",room:"37"}],
+  },
+  "9В":{
+    monday:[{num:1,subject:"Классный час",room:null},{num:2,subject:"Биология",room:"41"},{num:3,subject:"География",room:"56"},{num:4,subject:"Физическая культура",room:null},{num:5,subject:"Математика",room:"50"},{num:6,subject:"Русский язык",room:"61"}],
+    tuesday:[{num:1,subject:"Русский язык",room:"47"},{num:2,subject:"Физика",room:"27"},{num:3,subject:"Физическая культура",room:null},{num:4,subject:"Информатика",room:"28"},{num:5,subject:"Русский язык",room:"57"},{num:6,subject:"Литература",room:"57"},{num:7,subject:"Математика",room:"50"}],
+    wednesday:[{num:1,subject:"Труд",room:"4"},{num:2,subject:"История",room:"47"},{num:3,subject:"Химия",room:"18"},{num:4,subject:"Обществознание",room:"58"},{num:5,subject:"Биология",room:"41"},{num:6,subject:"Английский язык",room:"44/54"},{num:7,subject:"Математика",room:"50"}],
+    thursday:[{num:1,subject:"Классный час",room:null},{num:2,subject:"Физика",room:"27"},{num:3,subject:"История",room:"52"},{num:4,subject:"Математика",room:"50"},{num:5,subject:"Физическая культура",room:null},{num:6,subject:"Английский язык",room:"44/54"},{num:7,subject:"Литература",room:"27"}],
+    friday:[{num:1,subject:"ОБЗР",room:"55"},{num:2,subject:"Математика",room:"52"},{num:3,subject:"География",room:"56"},{num:4,subject:"Химия",room:"18"},{num:5,subject:"Физика",room:"27"},{num:6,subject:"Литература",room:"61"}],
+    saturday:[{num:1,subject:"История",room:"49"},{num:2,subject:"Математика",room:"50"},{num:3,subject:"Проект. и исслед. деят.",room:"59"},{num:4,subject:"Английский язык",room:"44/54"}],
+  },
+  "9Г":{
+    monday:[{num:1,subject:"Классный час",room:null},{num:2,subject:"Физическая культура",room:null},{num:3,subject:"Русский язык",room:"59"},{num:4,subject:"История",room:"51"},{num:5,subject:"Химия",room:"18"},{num:6,subject:"Математика",room:"50"},{num:7,subject:"Английский язык",room:"44/54"}],
+    tuesday:[{num:1,subject:"Химия",room:"18"},{num:2,subject:"Биология",room:"41"},{num:3,subject:"Информатика",room:"28"},{num:4,subject:"Математика",room:"50"},{num:5,subject:"Английский язык",room:"44/54"},{num:6,subject:"Физика",room:"27"},{num:7,subject:"Труд",room:"48"}],
+    wednesday:[{num:1,subject:"Русский язык",room:"59"},{num:2,subject:"Физическая культура",room:null},{num:3,subject:"Физика",room:"27"},{num:4,subject:"География",room:"56"},{num:5,subject:"Литература",room:"59"},{num:6,subject:"Математика",room:"50"}],
+    thursday:[{num:1,subject:"Классный час",room:null},{num:2,subject:"Биология",room:"41"},{num:3,subject:"ОБЗР",room:"55"},{num:4,subject:"История",room:"27"},{num:5,subject:"Математика",room:"50"},{num:6,subject:"Русский язык",room:"59"}],
+    friday:[{num:1,subject:"География",room:"56"},{num:2,subject:"Физика",room:"27"},{num:3,subject:"Литература",room:"59"},{num:4,subject:"История",room:"49"},{num:5,subject:"Литература",room:"59"},{num:6,subject:"Физическая культура",room:null},{num:7,subject:"Математика",room:"50"}],
+    saturday:[{num:1,subject:"Английский язык",room:"44/54"},{num:2,subject:"Обществознание",room:"41"},{num:3,subject:"Математика",room:"50"},{num:4,subject:"Пр. и исслед. деят.",room:"59"}],
+  },
+  "9Д":{
+    monday:[{num:1,subject:"Классный час",room:null},{num:2,subject:"Труд",room:"4"},{num:3,subject:"Физика",room:"27"},{num:4,subject:"Биология",room:"41"},{num:5,subject:"Русский язык",room:"58"},{num:6,subject:"Литература",room:"58"},{num:7,subject:"Математика",room:"50"}],
+    tuesday:[{num:1,subject:"История",room:"61"},{num:2,subject:"История",room:"61"},{num:3,subject:"Математика",room:"50"},{num:4,subject:"Физическая культура",room:null},{num:5,subject:"География",room:"56"},{num:6,subject:"Информатика",room:"28"}],
+    wednesday:[{num:1,subject:"Математика",room:"50"},{num:2,subject:"Химия",room:"18"},{num:3,subject:"ОБЗР",room:"55"},{num:4,subject:"Физика",room:"27"},{num:5,subject:"Русский язык",room:"58"},{num:6,subject:"Литература",room:"58"},{num:7,subject:"Английский язык",room:"44/54"}],
+    thursday:[{num:1,subject:"Классный час",room:null},{num:2,subject:"История",room:"61"},{num:3,subject:"Русский язык",room:"58"},{num:4,subject:"Литература",room:null},{num:5,subject:"Физика",room:"27"},{num:6,subject:"Пр. и исслед. деят.",room:"62"},{num:7,subject:"Химия",room:"18"}],
+    friday:[{num:1,subject:"Обществознание",room:"61"},{num:2,subject:"Английский язык",room:"44/54"},{num:3,subject:"Математика",room:"50"},{num:4,subject:"Математика",room:"50"},{num:5,subject:"Физическая культура",room:null},{num:6,subject:"География",room:"56"}],
+    saturday:[{num:1,subject:"Биология",room:"41"},{num:2,subject:"Английский язык",room:"44/54"},{num:3,subject:"Физическая культура",room:null},{num:4,subject:"Математика",room:"50"}],
+  },
+  "9Е":{
+    monday:[{num:1,subject:"Классный час",room:null},{num:2,subject:"Математика",room:"37"},{num:3,subject:"Физическая культура",room:null},{num:4,subject:"Труд",room:"4"},{num:5,subject:"Биология",room:"41"},{num:6,subject:"Химия",room:"18"},{num:7,subject:"Обществознание",room:"55"}],
+    tuesday:[{num:1,subject:"Литература",room:"57"},{num:2,subject:"Информатика",room:"28"},{num:3,subject:"Математика",room:"37"},{num:4,subject:"Английский язык",room:"44/53"},{num:5,subject:"История",room:"62"},{num:6,subject:"География",room:"56"}],
+    wednesday:[{num:1,subject:"Физика",room:"27"},{num:2,subject:"Английский язык",room:"44/48"},{num:3,subject:"Математика",room:"37"},{num:4,subject:"Русский язык",room:"57"},{num:5,subject:"ОБЗР",room:"55"},{num:6,subject:"Физическая культура",room:null},{num:7,subject:"Литература",room:"57"}],
+    thursday:[{num:1,subject:"Классный час",room:null},{num:2,subject:"География",room:"56"},{num:3,subject:"Физическая культура",room:null},{num:4,subject:"Математика",room:"37"},{num:5,subject:"История",room:"47"},{num:6,subject:"Физика",room:"27"},{num:7,subject:"Пр. и исслед. деят.",room:"62"}],
+    friday:[{num:1,subject:"Английский язык",room:"44/47"},{num:2,subject:"Математика",room:"37"},{num:3,subject:"История",room:"49"},{num:4,subject:"Физика",room:"27"},{num:5,subject:"Химия",room:"18"},{num:6,subject:"Русский язык",room:"57"}],
+    saturday:[{num:1,subject:"Русский язык",room:"57"},{num:2,subject:"Литература",room:"57"},{num:3,subject:"Математика",room:"37"},{num:4,subject:"Биология",room:"41"}],
+  },
+};
+
+// ─── STATE ────────────────────────────────────────────────────────────────────
+const DAY_KEYS  = ["sunday","monday","tuesday","wednesday","thursday","friday","saturday"];
+const DAY_RU    = ["Вс","Пн","Вт","Ср","Чт","Пт","Сб"];
+const DAY_FULL  = ["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"];
+const MONTHS_RU = ["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"];
+
+let currentClass  = localStorage.getItem("cls") || "9А";
+let selDayIdx     = getMSKNow().getDay() || 1; // default Mon if Sun
+let bellsViewDay  = getMSKNow().getDay() || 1;
+let currentView   = "main";
+let hwKey         = null;
+
+// ─── TELEGRAM THEME ───────────────────────────────────────────────────────────
+try {
+  const tg = window.Telegram?.WebApp;
+  if (tg) {
+    tg.ready(); tg.expand();
+    const p = tg.themeParams;
+    if (tg.colorScheme==="light" || (p?.bg_color && parseInt(p.bg_color.replace("#",""),16)>0x888888))
+      document.documentElement.setAttribute("data-theme","light");
+  }
+} catch(e){}
+
+// URL class param (from bot)
+const urlP = new URLSearchParams(window.location.search);
+const urlCls = urlP.get("class");
+if (urlCls && SCHEDULE[urlCls]) { currentClass = urlCls; localStorage.setItem("cls",urlCls); }
+
+// ─── TIME UTILS ───────────────────────────────────────────────────────────────
+function getMSKNow() {
+  const n = new Date();
+  return new Date(n.getTime() + n.getTimezoneOffset()*60000 + 3*3600000);
+}
+function t2s(t) { const [h,m] = t.split(":").map(Number); return h*3600+m*60; }
+function pad2(n) { return String(n).padStart(2,"0"); }
+function fmtCD(sec) { if(sec<=0)return"00:00"; return pad2(Math.floor(sec/60))+":"+pad2(sec%60); }
+
+// ─── STATUS LOGIC (smart bells) ───────────────────────────────────────────────
+function getStatus(msk) {
+  const bells = getBells(msk.getDay());
+  const now = msk.getHours()*3600 + msk.getMinutes()*60 + msk.getSeconds();
+  for (let i=0;i<bells.length;i++) {
+    const s=t2s(bells[i].start), e=t2s(bells[i].end);
+    if (now>=s && now<e)
+      return {type:"lesson", lesson:bells[i].lesson, secLeft:e-now};
+    if (i<bells.length-1) {
+      const ns=t2s(bells[i+1].start);
+      if (now>=e && now<ns)
+        return {type:"break", afterLesson:bells[i].lesson, nextLesson:bells[i+1].lesson, secLeft:ns-now};
+    }
+  }
+  const first=t2s(bells[0].start), last=t2s(bells[bells.length-1].end);
+  if (now<first) return {type:"before", secLeft:first-now};
+  if (now>=last) return {type:"done"};
+  return {type:"idle"};
+}
+
+// ─── CLOCK UPDATE ─────────────────────────────────────────────────────────────
+function updateClock() {
+  const msk = getMSKNow();
+  document.getElementById("clockH").textContent = pad2(msk.getHours());
+  document.getElementById("clockM").textContent = pad2(msk.getMinutes());
+  document.getElementById("clockS").textContent = pad2(msk.getSeconds());
+  document.getElementById("clockDate").textContent =
+    `${DAY_FULL[msk.getDay()]}, ${msk.getDate()} ${MONTHS_RU[msk.getMonth()]}`;
+}
+
+// ─── STATUS UPDATE ────────────────────────────────────────────────────────────
+function updateStatus() {
+  const msk = getMSKNow();
+  const todayDayIdx = msk.getDay();
+  const dayKey = DAY_KEYS[todayDayIdx];
+  const sched = (SCHEDULE[currentClass]||{})[dayKey]||[];
+  const bells = getBells(todayDayIdx);
+  const st = getStatus(msk);
+
+  const card = document.getElementById("statusCard");
+  const hint = document.getElementById("nextHint");
+  card.className = "status-card";
+  hint.classList.remove("show");
+
+  if (st.type==="lesson") {
+    card.classList.add("s-active");
+    const l = sched.find(x=>x.num===st.lesson);
+    const s = l ? (SUBJ[l.subject]||{}) : {};
+    document.getElementById("sLbl").textContent  = `${s.emoji||"📚"} Идёт урок №${st.lesson}`;
+    document.getElementById("sMain").textContent = l?.subject||"Урок";
+    document.getElementById("sTimer").textContent = fmtCD(st.secLeft);
+    const next = sched.find(x=>x.num===st.lesson+1);
+    if (next?.room) showHint(next);
+  } else if (st.type==="break") {
+    card.classList.add("s-break");
+    document.getElementById("sLbl").textContent = "☕ Перемена";
+    const next = sched.find(x=>x.num===st.nextLesson);
+    const ns = next ? (SUBJ[next.subject]||{}) : {};
+    document.getElementById("sMain").textContent = next ? `${ns.emoji||""} ${next.subject}` : "Перемена";
+    document.getElementById("sTimer").textContent = fmtCD(st.secLeft);
+    if (st.secLeft<=300 && next?.room) showHint(next);
+  } else if (st.type==="before") {
+    const bells0 = getBells(todayDayIdx);
+    document.getElementById("sLbl").textContent  = "🌅 До начала уроков";
+    document.getElementById("sMain").textContent = `Первый урок в ${bells0[0].start}`;
+    document.getElementById("sTimer").textContent = fmtCD(st.secLeft);
+  } else if (st.type==="done") {
+    card.classList.add("s-done");
+    document.getElementById("sLbl").textContent  = "🏠 Уроки закончились";
+    document.getElementById("sMain").textContent = "Можно идти домой!";
+    document.getElementById("sTimer").textContent = "";
+  } else {
+    document.getElementById("sLbl").textContent  = "📅 Сегодня выходной";
+    document.getElementById("sMain").textContent = "Отдыхай!";
+    document.getElementById("sTimer").textContent = "";
+  }
+}
+
+function showHint(lesson) {
+  const s = SUBJ[lesson.subject]||{};
+  document.getElementById("nhEmoji").textContent = s.emoji||"📍";
+  document.getElementById("nhText").textContent  = `Следующий: ${lesson.subject}`;
+  document.getElementById("nhRoom").textContent  = `Каб. ${lesson.room}`;
+  document.getElementById("nextHint").classList.add("show");
+}
+
+// ─── HEADER ───────────────────────────────────────────────────────────────────
+function updateHeader() {
+  document.getElementById("hdrClass").textContent = `Расписание ${currentClass}`;
+  const msk = getMSKNow();
+  document.getElementById("hdrSub").textContent =
+    `${DAY_FULL[msk.getDay()]}, ${msk.getDate()} ${MONTHS_RU[msk.getMonth()]}`;
+}
+
+// ─── DAY TABS ─────────────────────────────────────────────────────────────────
+function renderDayTabs() {
+  const row = document.getElementById("daysRow");
+  row.innerHTML = "";
+  const today = getMSKNow().getDay();
+  [1,2,3,4,5,6].forEach(i=>{
+    const b = document.createElement("button");
+    b.className = "day-tab"+(i===selDayIdx?" active":"")+(i===today?" today":"");
+    b.textContent = DAY_RU[i];
+    b.onclick = ()=>{ selDayIdx=i; renderDayTabs(); renderSched(); };
+    row.appendChild(b);
+  });
+}
+
+// ─── SCHEDULE RENDER ─────────────────────────────────────────────────────────
+function renderSched() {
+  const list = document.getElementById("schedList");
+  list.innerHTML = "";
+  const dayKey = DAY_KEYS[selDayIdx];
+  const lessons = (SCHEDULE[currentClass]||{})[dayKey]||[];
+  const bells = getBells(selDayIdx);
+  const todayIdx = getMSKNow().getDay();
+  const st = getStatus(getMSKNow());
+
+  if (!lessons.length) {
+    list.innerHTML=`<div style="text-align:center;padding:40px;color:var(--text3)">Нет уроков 🎉</div>`;
+    return;
+  }
+  lessons.forEach(l=>{
+    const bell = bells.find(b=>b.lesson===l.num);
+    const isToday = selDayIdx===todayIdx;
+    const isCur = isToday && st.type==="lesson" && st.lesson===l.num;
+    const isCT  = l.subject==="Классный час";
+    const s = SUBJ[l.subject]||{emoji:"📚"};
+    const hw = localStorage.getItem(`hw_${currentClass}_${dayKey}_${l.num}`);
+
+    const d = document.createElement("div");
+    d.className = "l-card"+(isCur?" cur":"")+(isCT?" ct":"");
+    d.innerHTML = `
+      <span class="l-num">${l.num}</span>
+      <span class="l-emoji">${s.emoji}</span>
+      <div class="l-info">
+        <div class="l-name">${l.subject}${l.note?` <small style="color:var(--text3);font-size:11px;font-weight:400">${l.note}</small>`:""}</div>
+        <div class="l-time">${bell?`${bell.start} – ${bell.end}`:""}</div>
+      </div>
+      ${l.room?`<div class="l-room">📍 ${l.room}</div>`:""}
+      ${hw?`<div class="hw-dot"></div>`:""}
+    `;
+    if(!isCT) d.onclick=()=>openHW(l,dayKey);
+    list.appendChild(d);
+  });
+}
+
+// ─── MAIN TAB TODAY SCHEDULE ─────────────────────────────────────────────────
+function renderMainSched() {
+  const list = document.getElementById("mainSchedList");
+  const titleEl = document.getElementById("mainTodayTitle");
+  list.innerHTML = "";
+
+  const msk = getMSKNow();
+  const todayIdx = msk.getDay();
+
+  // Weekend / no lessons
+  if (todayIdx === 0) {
+    titleEl.textContent = "Сегодня воскресенье";
+    list.innerHTML = `<div style="text-align:center;padding:24px 0;color:var(--text3);font-size:14px">Отдыхай! 🎉</div>`;
+    return;
+  }
+
+  const dayKey = DAY_KEYS[todayIdx];
+  const lessons = (SCHEDULE[currentClass]||{})[dayKey]||[];
+  const bells   = getBells(todayIdx);
+  const st      = getStatus(msk);
+  const now     = msk.getHours()*3600 + msk.getMinutes()*60 + msk.getSeconds();
+
+  const dayNames = ["","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"];
+  titleEl.textContent = `Расписание — ${dayNames[todayIdx]}`;
+
+  if (!lessons.length) {
+    list.innerHTML = `<div style="text-align:center;padding:24px 0;color:var(--text3);font-size:14px">Нет уроков 🎉</div>`;
+    return;
+  }
+
+  // Determine next lesson number
+  let nextLessonNum = null;
+  if (st.type === "break") nextLessonNum = st.nextLesson;
+  if (st.type === "before") nextLessonNum = bells[0].lesson;
+
+  lessons.forEach(l => {
+    const bell   = bells.find(b => b.lesson === l.num);
+    const isCur  = st.type === "lesson" && st.lesson === l.num;
+    const isNext = nextLessonNum !== null && l.num === nextLessonNum;
+    const isCT   = l.subject === "Классный час";
+    const isPast = bell ? now >= t2s(bell.end) && !isCur : false;
+    const s      = SUBJ[l.subject] || {emoji:"📚"};
+    const hw     = localStorage.getItem(`hw_${currentClass}_${dayKey}_${l.num}`);
+
+    const d = document.createElement("div");
+    let cls = "l-card";
+    if (isCur)  cls += " cur";
+    if (isNext && !isCur) cls += " next-up";
+    if (isPast && !isCur) cls += " past";
+    if (isCT)   cls += " ct";
+    d.className = cls;
+
+    d.innerHTML = `
+      <span class="l-num">${l.num}</span>
+      <span class="l-emoji">${s.emoji}</span>
+      <div class="l-info">
+        <div class="l-name">${l.subject}${l.note ? ` <small style="color:var(--text3);font-size:11px;font-weight:400">${l.note}</small>` : ""}</div>
+        <div class="l-time">${bell ? `${bell.start} – ${bell.end}` : ""}</div>
+      </div>
+      ${isNext && !isCur ? `<span class="next-badge">след.</span>` : ""}
+      ${l.room ? `<div class="l-room">📍 ${l.room}</div>` : ""}
+      ${hw ? `<div class="hw-dot"></div>` : ""}
+    `;
+    if (!isCT && !isPast) d.onclick = () => openHW(l, dayKey);
+    list.appendChild(d);
+  });
+}
+
+
+function renderBells() {
+  // Day switcher
+  const sw = document.getElementById("bellDaySwitcher");
+  sw.innerHTML="";
+  const groups = [{label:"Пн, Чт",days:[1,4]},{label:"Вт, Ср, Пт",days:[2,3,5]},{label:"Суббота",days:[6]}];
+  groups.forEach(g=>{
+    const b=document.createElement("button");
+    b.className="ds-btn"+(g.days.includes(bellsViewDay)?" active":"");
+    b.textContent=g.label;
+    b.onclick=()=>{ bellsViewDay=g.days[0]; renderBells(); };
+    sw.appendChild(b);
+  });
+
+  // Grid
+  const grid = document.getElementById("bellGrid");
+  grid.innerHTML="";
+  const bells = getBells(bellsViewDay);
+  const msk = getMSKNow();
+  const now = msk.getHours()*3600+msk.getMinutes()*60+msk.getSeconds();
+  const todayIdx = msk.getDay();
+
+  bells.forEach((b,i)=>{
+    const dur = Math.round((t2s(b.end)-t2s(b.start))/60);
+    const brkAfter = i<bells.length-1 ? Math.round((t2s(bells[i+1].start)-t2s(b.end))/60) : null;
+    const isCurBell = bells===getBells(todayIdx) && now>=t2s(b.start) && now<t2s(b.end);
+
+    const row = document.createElement("div");
+    row.className="bell-row"+(isCurBell?" cur-bell":"");
+    row.innerHTML=`
+      <span class="b-num">${b.lesson}</span>
+      <div style="flex:1">
+        <div class="b-times">${b.start} — ${b.end}</div>
+        ${brkAfter?`<div class="b-brk">перемена ${brkAfter} мин</div>`:""}
+      </div>
+      <div class="b-dur">${dur} мин</div>
+    `;
+    grid.appendChild(row);
+  });
+}
+
+// ─── OGE RENDER ───────────────────────────────────────────────────────────────
+function renderOGE() {
+  // Exams
+  const list = document.getElementById("ogeExams");
+  list.innerHTML="";
+  const msk = getMSKNow();
+  const today = new Date(msk.getFullYear(),msk.getMonth(),msk.getDate());
+
+  OGE_EXAMS.forEach(ex=>{
+    const exDate = new Date(ex.date);
+    const diff = Math.ceil((exDate-today)/86400000);
+    const [,dd,mm] = ex.label.match(/(\d+)[–\-]?(?:\d+)?\s+(\S+)/)||["","?","?"];
+    const card = document.createElement("div");
+    card.className="exam-card"+(diff<0?" past":"");
+    card.innerHTML=`
+      <div class="exam-date-badge">
+        <div class="exam-dd">${ex.label.split(" ")[0]}</div>
+        <div class="exam-mm">${ex.label.split(" ").slice(1).join(" ")}</div>
+      </div>
+      <div class="exam-info"><div class="exam-subjs">${ex.subjects}</div></div>
+      <div class="exam-counter">
+        <div class="exam-days-num">${diff>0?diff:(diff===0?"Сегодня":"Прошёл")}</div>
+        ${diff>0?`<div class="exam-days-lbl">дней</div>`:""}
+      </div>
+    `;
+    list.appendChild(card);
+  });
+
+  // Grid
+  const grid = document.getElementById("ogeGrid");
+  grid.innerHTML="";
+  OGE_RESOURCES.forEach((res,i)=>{
+    const btn=document.createElement("div");
+    btn.className="oge-subj-btn";
+    btn.innerHTML=`<span class="oge-subj-emoji">${res.emoji}</span><span class="oge-subj-name">${res.name}</span>`;
+    btn.onclick=()=>openResSheet(res);
+    grid.appendChild(btn);
+  });
+}
+
+function openResSheet(res) {
+  document.getElementById("resTitle").textContent = `${res.emoji} ${res.name}`;
+  document.getElementById("resSub").textContent   = "Выбери ресурс для подготовки";
+  const links = document.getElementById("resLinks");
+  links.innerHTML="";
+  res.links.forEach(l=>{
+    const a=document.createElement("a");
+    a.className="res-link";
+    a.href=l.url; a.target="_blank"; a.rel="noopener";
+    a.innerHTML=`
+      <span class="res-link-icon">${l.icon}</span>
+      <div class="res-link-info">
+        <div class="res-link-title">${l.title}</div>
+        <div class="res-link-url">${l.url.replace("https://","")}</div>
+      </div>
+      <span class="res-link-arrow">›</span>
+    `;
+    links.appendChild(a);
+  });
+  document.getElementById("resOverlay").classList.add("open");
+}
+
+// ─── HW ───────────────────────────────────────────────────────────────────────
+function openHW(lesson,dayKey) {
+  const s=SUBJ[lesson.subject]||{emoji:"📚"};
+  hwKey=`hw_${currentClass}_${dayKey}_${lesson.num}`;
+  document.getElementById("hwTitle").textContent=`${s.emoji} ${lesson.subject}`;
+  document.getElementById("hwSub").textContent=`${DAY_FULL[selDayIdx]}, ${lesson.num}-й урок`;
+  document.getElementById("hwTa").value=localStorage.getItem(hwKey)||"";
+  document.getElementById("hwOverlay").classList.add("open");
+}
+function saveHW() {
+  const v=document.getElementById("hwTa").value.trim();
+  if(v) localStorage.setItem(hwKey,v); else localStorage.removeItem(hwKey);
+  document.getElementById("hwOverlay").classList.remove("open");
+  renderSched();
+}
+
+// ─── CLASS MODAL ─────────────────────────────────────────────────────────────
+function openClassModal() {
+  const g=document.getElementById("clsGrid"); g.innerHTML="";
+  Object.keys(SCHEDULE).forEach(cls=>{
+    const b=document.createElement("button");
+    b.className="cls-opt"+(cls===currentClass?" sel":"");
+    b.textContent=cls;
+    b.onclick=()=>{ currentClass=cls; localStorage.setItem("cls",cls); closeSheet("classModal"); renderAll(); };
+    g.appendChild(b);
+  });
+  document.getElementById("classModal").classList.add("open");
+}
+
+// ─── VIEW SWITCHER ────────────────────────────────────────────────────────────
+function sw(v) {
+  currentView=v;
+  const map={main:"Main",schedule:"Schedule",bells:"Bells",oge:"Oge"};
+  Object.keys(map).forEach(k=>{
+    document.getElementById("view"+map[k]).classList.toggle("active",k===v);
+    document.getElementById("nav"+map[k]).classList.toggle("active",k===v);
+  });
+}
+
+// ─── SHEET CLOSE ─────────────────────────────────────────────────────────────
+function closeSheet(id,e) {
+  if (e && e.target!==document.getElementById(id)) return;
+  document.getElementById(id).classList.remove("open");
+}
+
+// ─── FULL RENDER ─────────────────────────────────────────────────────────────
+function renderAll() {
+  updateHeader();
+  updateClock();
+  updateStatus();
+  renderMainSched();
+  renderDayTabs();
+  renderSched();
+  renderBells();
+  renderOGE();
+}
+
+renderAll();
+// Sync selDayIdx with today on load
+selDayIdx = getMSKNow().getDay();
+if (selDayIdx===0) selDayIdx=1;
+renderDayTabs(); renderSched();
+
+// Live tick
+setInterval(()=>{ updateClock(); updateStatus(); updateHeader(); renderMainSched(); }, 1000);
+</script>
+</body>
+</html>
